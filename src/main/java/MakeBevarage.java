@@ -13,6 +13,8 @@ public class MakeBevarage implements Runnable {
 
         Thread[] threads = new Thread[requests.size()];
         int i=0;
+
+        // For n requestes at the same time , n threads are spawned to serve the request
         for(String req : requests ) {
             Thread t1 = new Thread(this, req);
             threads[i++]=t1;
@@ -20,6 +22,9 @@ public class MakeBevarage implements Runnable {
         for(i=0;i<requests.size();i++){
             threads[i].start();
         }
+
+
+        // Wait for all the threads to complete
         for(i=0;i<requests.size();i++) {
             try {
                 threads[i].join();
@@ -29,9 +34,10 @@ public class MakeBevarage implements Runnable {
         };
     }
 
+    // piece of code which modifies the critical section items Ex: ingredents
+    // to avoid inconsistencies and this function calls execute in synchronous way
 
     public synchronized void makeDrink(String beverage) throws InterruptedException {
-        //TODO
         HashMap<String,Integer> bevarageConf = this.beveragesList.get(beverage);
         for(String s:bevarageConf.keySet()){
             Integer available = ingredients.get(s);
@@ -63,6 +69,7 @@ public class MakeBevarage implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
     }
 
 

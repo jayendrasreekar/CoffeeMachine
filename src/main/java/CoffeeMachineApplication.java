@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.*;
 
 import static java.lang.System.exit;
+import static java.lang.System.setOut;
 
 
 public class CoffeeMachineApplication {
@@ -27,7 +28,7 @@ public class CoffeeMachineApplication {
     }
 
     private void loadConfiguration(Scanner sc) throws IOException, ParseException {
-
+        // Loading the input Configuration provided from the file
         JSONParser parser = new JSONParser();
         System.out.println("Input the Config file. If not available use the one in src/main/resources/input1.json\n");
         String path = sc.next();
@@ -42,7 +43,6 @@ public class CoffeeMachineApplication {
         Iterator<String> i = keys.iterator();
         while(i.hasNext()){
             String key = i.next();
-            //System.out.println(key +" and "+ resources.get(key));
             ingredients.put(key, Integer.valueOf(String.valueOf(resources.get(key))));
         }
 
@@ -57,12 +57,40 @@ public class CoffeeMachineApplication {
             Iterator<String> iter = ingredients.iterator();
             while(iter.hasNext()){
                 String k = iter.next();
-                //System.out.println(k+" and" + beverage.get(k));
                 beverageConf.put(k,Integer.valueOf(String.valueOf(beverage.get(k))));
             }
             beveragesList.put(key,beverageConf);
         }
     }
+
+
+    /*
+    ==================================================================================
+    ReadMe:
+
+    - Given input which is outlets, ingredients and beverages are taken from the provided Json file.
+    - HashMaps are used to maintain ingredients and beverages.
+    - Within the scope of the problem it is assumed that parallel requests are  simulated as comma seperate  input list of beverages requested at the moment.
+    - When ever the request is given. Say n requests, n parallel processes(threads) were invoked and which does the computation
+    - After the Computation is successfully performed, it shows the success or failure of making of the drink
+
+
+    There are two types of users:
+     1. user - can order the drinks
+     2. Service-person - Who can load ingredients
+
+
+    Things not done because of lack of time.
+    1. Tests, Test cases not written. But it can be easily tested by adding a new file and changing few fields in src/main/resources and it can be fed during the start of program by user input.
+    2. No detailed error message.
+    3. Basic input validation
+    ==================================================================================
+    */
+
+
+
+
+
 
     public static void main(String[]args) throws IOException, ParseException, InterruptedException {
         CoffeeMachineApplication cap = new CoffeeMachineApplication();
@@ -85,12 +113,17 @@ public class CoffeeMachineApplication {
                       List<String> req_beverages = Arrays.asList(req.trim().split(","));
                       cap.coffeeMachine.serveRequest(req_beverages);
                       break;
-              case 2: System.out.println("Refill the Ingredients. To add ingredient, provide it in the form hot_water,150");
+              case 2: System.out.println("Refill the Ingredients");
+                      System.out.println("Available Ingredients are");
+                      System.out.println(cap.ingredients.entrySet());
+                      System.out.println("To add ingredient, provide it in the form hot_water,150");
                       String[] s = sc.next().trim().split(",");
                       String ingredient = s[0];
                       int quantity = Integer.parseInt(s[1]);
                       if(cap.ingredients.containsKey(ingredient)) {
                           cap.ingredients.put(ingredient,cap.ingredients.get(ingredient)+quantity);
+                      }else{
+                          System.out.println("The provided ingredient is not valid");
                       }
                       break;
               default:

@@ -16,17 +16,13 @@ public class CoffeeMachine {
       this.beveragesList = beveragesList;
   }
 
-
-  public void loadIngredients(HashMap<String,Integer> ingredients){
-        // TODO
-  }
-
   public void showUnavailability(){
-
+     //TODO : Later :  show unavailability of certain ingredients or drinks based on calculations at everytime the user is showed menu
   };
 
   public void serveRequest(List<String> requests){
       statuses.clear();
+      // Class that handles the request
       MakeBevarage b1 = new MakeBevarage(requests,ingredients,beveragesList,statuses);
       System.out.println("\n\n");
       for(String i: statuses){
